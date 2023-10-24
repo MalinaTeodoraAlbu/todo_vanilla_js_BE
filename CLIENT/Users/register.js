@@ -1,26 +1,30 @@
-import { users } from '../Database/users.js'
+let url = "http://localhost:3000/"
 
 export function register(e) {
     console.log('vrei sa te inregistrezi')
     e.preventDefault()
 
-    let registerEmail = document.getElementById('registerEmail').value
+    let user ={}
 
-    if (users.find(element => element.email === registerEmail)) {
-        console.log('Exista deja un utilizator cu aceasta adresa de email')
-    } else {
-        let username = document.getElementById('registerUsername').value
-        let password = document.getElementById('registerPassword').value
-        let newId = users[users.length-1].id + 1
+    user.email = document.getElementById('registerEmail').value
+    user.name = document.getElementById('registerUsername').value
+    user.password = document.getElementById('registerPassword').value
 
-        let newUser = {
-            id: newId,
-            name: username,
-            email: registerEmail,
-            password: password
-        }
+    console.log('trying to send data to server app ', user)
+    fetch(url + "register", {
+        method: 'POST', 
+        mode: 'cors', 
+        cache: 'no-cache', 
+        credentials: 'same-origin', 
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        redirect: 'follow', 
+        referrerPolicy: 'no-referrer', 
+        body: JSON.stringify(user) 
+      })
+      .then(res => res.text()
+      .then(res => console.log(res))
+      )
 
-        users.push(newUser)
-        console.log(users)
-    }
 }
